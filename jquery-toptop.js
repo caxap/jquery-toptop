@@ -13,7 +13,8 @@
 		initialize: function(element, options) {
 			this.$element = $(element);
 			this.options = $.extend({}, $.fn.toptop.defaults, options);
-			this.$element.bund('click.toptop', $.proxy(this.onTop, this)).hide();
+			this.scrolling = false;
+			this.$element.bind('click.toptop', $.proxy(this.onTop, this)).hide();
 			$(window).bind('scroll.toptop', $.proxy(this.onScroll, this));
 		},
 
@@ -28,6 +29,8 @@
 		onScroll: function() {
 			var o = this.options,
 				offset = $(window).scrollTop();
+
+			if (this.scrolling) return;
 
 			if (isIE) {
 				// workflow for IE
@@ -45,8 +48,13 @@
 		},
 
 		onTop: function(e) {
+			var o = this.options,
+				done = $.proxy(function() { this.scrolling = false; }, this);
 			e && e.preventDefault();
-			$('html, body').animate({scrollTop: 0}, this.options.scrollSpeed);
+			if (this.scrolling) return;
+			this.scrolling = true;
+			this.hide();
+			$('html, body').animate({scrollTop: 0}, o.scrollSpeed, done);
 		}
 	};
 
