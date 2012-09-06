@@ -13,8 +13,8 @@
 		initialize: function(element, options) {
 			this.$element = $(element);
 			this.options = $.extend({}, $.fn.toptop.defaults, options);
-			this.$element.click($.proxy(this.onTop, this)).hide();
-			$(window).scroll($.proxy(this.onScroll, this));
+			this.$element.bund('click.toptop', $.proxy(this.onTop, this)).hide();
+			$(window).bind('scroll.toptop', $.proxy(this.onScroll, this));
 		},
 
 		show: function() {
